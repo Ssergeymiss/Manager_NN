@@ -63,18 +63,11 @@ def export(table_name):
         row_index += 1
 
     print(str(row_index) + ' rows written successfully to ' + workbook.filename)
+    st.write(table_name + " Успешно загружено")
 
     # Closing workbook
     workbook.close()
 
-
-
-# Загружаем необходимые таблицы из БД
-export('qq85_sttlkofficeinvoice')#Заявки на услуги
-export('qq85_sttlkofficepayment')#Оплаченные заявки
-export('qq85_stthomeoffice_label')#Лэйблы
-
-# позволяет преобразовать данные из xlsx to csv
 def refactor_data(data_path,name_new):
     read_file = pd.read_excel (data_path+".xlsx")
     read_file.to_csv (name_new,
@@ -82,9 +75,32 @@ def refactor_data(data_path,name_new):
                       header=True)
 
 
-refactor_data('qq85_sttlkofficepayment',"payment.csv")
-refactor_data('qq85_sttlkofficeinvoice',"invoice.csv")
-refactor_data('qq85_stthomeoffice_label',"label.csv")
+# Загружаем необходимые таблицы из БД
+import os
+if os.path.isfile("qq85_sttlkofficeinvoice.xlsx") == False:
+    export('qq85_sttlkofficeinvoice')#Заявки на услуги
+    refactor_data('qq85_sttlkofficeinvoice', "invoice.csv")
+
+if os.path.isfile("qq85_sttlkofficepayment.xlsx") == False:
+    export('qq85_sttlkofficepayment')#Заявки на услуги
+    refactor_data('qq85_sttlkofficepayment', "payment.csv")
+    
+if os.path.isfile("qq85_stthomeoffice_label.xlsx") == False:
+    export('qq85_stthomeoffice_label')#Заявки на услуги
+    refactor_data('qq85_stthomeoffice_label', "label.csv")
+
+# export('')#Оплаченные заявки
+# export('qq85_stthomeoffice_label')#Лэйблы
+
+# позволяет преобразовать данные из xlsx to csv
+
+
+
+
+
+
+
+
 
 
 # В этом блоке мы выполняем подсчет общего количества менеджеров с заявками
